@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriReto DIF Irapuato</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  margin: 20px 0 10px;
+  font-size: clamp(24px, 5vw, 36px);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.difficulty-selector {
+  background: rgba(0,0,0,0.2);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.difficulty-selector h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.difficulty-btn {
+  padding: 12px 20px;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.difficulty-btn:hover {
+  background: white;
+  color: #27ae60;
+  transform: scale(1.05);
+}
+
+.difficulty-btn.active {
+  background: white;
+  color: #27ae60;
+  border-color: white;
+}
+
+.game-section {
+  display: none;
+}
+
+.game-section.active {
+  display: block;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 20px 0;
+  background: rgba(0,0,0,0.2);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.stat {
+  flex: 1;
+  min-width: 100px;
+}
+
+.stat span {
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.timer-bar {
+  height: 10px;
+  background: red;
+  width: 100%;
+  transition: width 0.1s linear;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.timer-bar.warning {
+  background: orange;
+}
+
+.timer-bar.critical {
+  background: red;
+  animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+#q {
+  font-size: clamp(18px, 4vw, 24px);
+  margin: 30px 0 20px;
+  min-height: 60px;
+  line-height: 1.4;
+}
+
+#a {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+button {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #3498db;
+  color: white;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #2980b9;
+  transform: scale(1.02);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.difficulty-level {
+  display: inline-block;
+  padding: 5px 10px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 5px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.difficulty-level.easy {
+  background: #27ae60;
+}
+
+.difficulty-level.normal {
+  background: #f39c12;
+}
+
+.difficulty-level.hard {
+  background: #e74c3c;
+}
+
+.footer {
+  margin-top: 30px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.confetti {
+  position: fixed;
+  pointer-events: none;
+  animation: fall 2s linear forwards;
+  z-index: 1000;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.ranking-table {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.ranking-table th,
+.ranking-table td {
+  padding: 10px;
+  border: 1px solid white;
+  text-align: center;
+}
+
+.ranking-table th {
+  background: rgba(255,255,255,0.2);
+}
+
+.ranking-table tr:nth-child(even) {
+  background: rgba(0,0,0,0.1);
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  
+  button {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .difficulty-buttons {
+    flex-direction: column;
+  }
+  
+  .difficulty-btn {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🍎 NutriReto DIF Irapuato</h1>
+<p style="margin-bottom: 20px;">Facilitador: Guillermo Alberto Mosiño Esqueda</p>
+
+<!-- Selector de Dificultad -->
+<div class="difficulty-selector" id="difficultySelector">
+  <h2>Elige tu nivel de dificultad</h2>
+  <div class="difficulty-buttons">
+    <button class="difficulty-btn active" onclick="selectDifficulty('easy')">
+      🟢 Fácil<br><small>15 segundos</small>
+    </button>
+    <button class="difficulty-btn" onclick="selectDifficulty('normal')">
+      🟡 Normal<br><small>12 segundos</small>
+    </button>
+    <button class="difficulty-btn" onclick="selectDifficulty('hard')">
+      🔴 Difícil<br><small>8 segundos</small>
+    </button>
+  </div>
+</div>
+
+<!-- Sección del Juego -->
+<div class="game-section active" id="gameSection">
+  <div class="timer-bar" id="bar"></div>
+
+  <div class="header">
+    <div class="stat">
+      ⏱️ <span id="time">15</span>s
+      <div class="stat-label">Tiempo</div>
+    </div>
+    <div class="stat">
+      ⭐ <span id="score">0</span>
+      <div class="stat-label">Puntos</div>
+    </div>
+    <div class="stat">
+      🏆 <span id="level">1</span>
+      <div class="stat-label">Nivel</div>
+    </div>
+  </div>
+
+  <div class="difficulty-level" id="difficultyDisplay"></div>
+
+  <h2 id="q"></h2>
+  <div id="a"></div>
+
+  <button onclick="backToDifficulty()" style="margin-top: 20px; background: #95a5a6;">
+    ⬅️ Volver a Dificultad
+  </button>
+</div>
+
+<div class="footer">
+  <p>🌱 La nutrición es clave para una vida digna y saludable.</p>
+</div>
+
+</div>
+
+<audio id="ok" preload="auto"></audio>
+<audio id="bad" preload="auto"></audio>
+<audio id="music" loop preload="auto"></audio>
+
+<script>
+// Base de preguntas por dificultad
+const questionsByDifficulty = {
+  easy: [
+    ["¿Mejor combinación saludable?",["Verduras + proteína + cereal","Solo carne","Solo fruta"],0],
+    ["¿Por qué tomar agua?",["Funciones del cuerpo","Solo sed","No sirve"],0],
+    ["Mucho azúcar causa?",["Enfermedades","Salud","Nada"],0],
+    ["Mejor opción?",["Fruta natural","Refresco","Jugo industrial"],0],
+    ["Energía saludable?",["Arroz o tortilla","Refresco","Dulces"],0],
+    ["Proteínas sirven?",["Músculos","Sabor","Nada"],0],
+    ["Sin verduras?",["Falta vitaminas","Nada","Solo hambre"],0],
+    ["Colación ideal?",["Fruta/yogurt","Papas","Dulces"],0],
+    ["Mejor hábito?",["Comer balanceado","Una vez al día","Evitar verduras"],0],
+    ["Mejor bebida?",["Agua","Refresco light","Energética"],0]
+  ],
+  normal: [
+    ["Adulto mayor come poco?",["Porciones pequeñas frecuentes","Obligar a comer","Quitar comida"],0],
+    ["¿Qué causa deshidratación?",["Falta de agua","Mucho ejercicio","Comer rápido"],0],
+    ["Legumbres bajo presupuesto?",["Proteína económica","Solo comida rápida","Ultraprocesados"],0],
+    ["Prevención de enfermedades?",["Alimentación sana","Comer lo que sea","Saltarse comidas"],0],
+    ["Poca movilidad requiere?",["Balance e hidratación","Solo reposo","No comer"],0],
+    ["Vitaminas en verduras?",["Esenciales para salud","Innecesarias","Solo en frutas"],0],
+    ["Carbohidratos complejos?",["Arroz, avena, papa","Azúcar blanca","Dulces"],0],
+    ["Grasas saludables?",["Aguacate, frutos secos","Tocino frito","Comida rápida"],0],
+    ["Calcio para huesos?",["Lácteos, verduras verdes","Solo leche entera","Suplementos"],0],
+    ["Fibra alimentaria?",["Digestión y saciedad","Engorda","No sirve"],0]
+  ],
+  hard: [
+    ["¿Índice Glucémico alto causa?",["Picos de glucosa","Energía estable","Pérdida de peso"],0],
+    ["Aminoácidos esenciales?",["De proteínas, no produce cuerpo","De grasas","De carbohidratos"],0],
+    ["Antioxidantes previenen?",["Envejecimiento celular","Peso","Sed"],0],
+    ["¿Qué es biodisponibilidad?",["Absorción de nutrientes","Calorías totales","Peso de comida"],0],
+    ["Metabolismo basal afecta?",["Gasto en reposo","Solo ejercicio","Nada importante"],0],
+    ["Colesterol HDL vs LDL?",["HDL bueno, LDL malo","Ambos dañinos","Ambos útiles"],0],
+    ["Micronutrientes esenciales?",["Vitaminas y minerales","Solo proteínas","Solo grasas"],0],
+    ["Síndrome metabólico causa?",["Alimentación + sedentarismo","Solo genética","Edad"],0],
+    ["Fermentación probiótica?",["Mejora flora intestinal","Daña digestión","Innecesaria"],0],
+    ["¿Carga glucémica baja?",["Menos impacto glucosa","Más energía","Menos saciedad"],0]
+  ]
+};
+
+const difficultySettings = {
+  easy: { time: 15, color: '#27ae60', label: '🟢 Fácil', multiplier: 1 },
+  normal: { time: 12, color: '#f39c12', label: '🟡 Normal', multiplier: 1.5 },
+  hard: { time: 8, color: '#e74c3c', label: '🔴 Difícil', multiplier: 2 }
+};
+
+let currentDifficulty = 'easy';
+let currentIndex = 0;
+let score = 0;
+let time = 15;
+let level = 1;
+let gameActive = true;
+let timerInterval = null;
+let questions = [];
+
+// Elementos del DOM
+const scoreEl = document.getElementById("score");
+const levelEl = document.getElementById("level");
+const timeEl = document.getElementById("time");
+const barEl = document.getElementById("bar");
+const questionEl = document.getElementById("q");
+const answersEl = document.getElementById("a");
+const okAudio = document.getElementById("ok");
+const badAudio = document.getElementById("bad");
+const musicAudio = document.getElementById("music");
+const difficultySelector = document.getElementById("difficultySelector");
+const gameSection = document.getElementById("gameSection");
+const difficultyDisplay = document.getElementById("difficultyDisplay");
+
+// URLs de audio
+okAudio.src = "https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3";
+badAudio.src = "https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3";
+musicAudio.src = "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3";
+
+function playSound(audio) {
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+
+function selectDifficulty(difficulty) {
+  currentDifficulty = difficulty;
+  questions = [...questionsByDifficulty[difficulty]].sort(() => Math.random() - 0.5);
+  
+  // Actualizar botones activos
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.closest('.difficulty-btn').classList.add('active');
+  
+  // Iniciar juego
+  currentIndex = 0;
+  score = 0;
+  level = 1;
+  gameActive = true;
+  time = difficultySettings[difficulty].time;
+  
+  updateDisplay();
+  loadQuestion();
+  playSound(musicAudio);
+  startTimer();
+}
+
+function loadQuestion() {
+  if (currentIndex >= questions.length) {
+    endGame();
+    return;
+  }
+
+  const [question, answers, correctIndex] = questions[currentIndex];
+  
+  questionEl.textContent = question;
+  difficultyDisplay.textContent = difficultySettings[currentDifficulty].label;
+  difficultyDisplay.className = 'difficulty-level ' + currentDifficulty;
+  answersEl.innerHTML = "";
+  
+  answers.forEach((answer, idx) => {
+    const button = document.createElement("button");
+    button.textContent = answer;
+    button.onclick = () => checkAnswer(idx, correctIndex);
+    answersEl.appendChild(button);
+  });
+
+  time = difficultySettings[currentDifficulty].time;
+  updateDisplay();
+}
+
+function checkAnswer(selectedIdx, correctIdx) {
+  if (!gameActive) return;
+  
+  gameActive = false;
+  clearInterval(timerInterval);
+  
+  if (selectedIdx === correctIdx) {
+    const points = 10 * difficultySettings[currentDifficulty].multiplier;
+    score += points;
+    level++;
+    playSound(okAudio);
+    createConfetti();
+  } else {
+    playSound(badAudio);
+    alert("❌ Respuesta incorrecta\n✅ La correcta era: " + questions[currentIndex][1][correctIdx]);
+  }
+  
+  currentIndex++;
+  gameActive = true;
+  loadQuestion();
+}
+
+function updateDisplay() {
+  scoreEl.textContent = Math.round(score);
+  levelEl.textContent = level;
+  timeEl.textContent = time;
+  
+  const percentage = (time / difficultySettings[currentDifficulty].time) * 100;
+  barEl.style.width = percentage + "%";
+  
+  barEl.classList.remove('warning', 'critical');
+  if (time <= 3) {
+    barEl.classList.add('critical');
+  } else if (time <= 5) {
+    barEl.classList.add('warning');
+  }
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  
+  timerInterval = setInterval(() => {
+    if (!gameActive) return;
+    
+    time--;
+    updateDisplay();
+    
+    if (time <= 0) {
+      clearInterval(timerInterval);
+      alert("⏰ ¡Tiempo agotado!");
+      currentIndex++;
+      gameActive = true;
+      loadQuestion();
+    }
+  }, 1000);
+}
+
+function createConfetti() {
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.left = Math.random() * 100 + "%";
+    confetti.style.top = "-10px";
+    confetti.style.background = ["#FFD700", "#FF69B4", "#00CED1", "#32CD32", "#FF6347"][Math.floor(Math.random() * 5)];
+    confetti.style.width = (Math.random() * 10 + 5) + "px";
+    confetti.style.height = confetti.style.width;
+    confetti.style.borderRadius = "50%";
+    
+    document.body.appendChild(confetti);
+    
+    setTimeout(() => confetti.remove(), 2000);
+  }
+}
+
+function backToDifficulty() {
+  clearInterval(timerInterval);
+  gameActive = false;
+  musicAudio.pause();
+  musicAudio.currentTime = 0;
+  
+  difficultySelector.style.display = 'block';
+  gameSection.style.display = 'none';
+}
+
+function endGame() {
+  clearInterval(timerInterval);
+  gameActive = false;
+  
+  const finalScore = Math.round(score);
+  const name = prompt("🏆 ¡Juego terminado!\n\nPuntuación Final: " + finalScore + "\nNivel: " + level + "\nDificultad: " + difficultySettings[currentDifficulty].label + "\n\n¿Cuál es tu nombre?") || "Anónimo";
+  
+  let ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+  ranking.push({ 
+    name, 
+    score: finalScore, 
+    level: level,
+    difficulty: currentDifficulty,
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString()
+  });
+  ranking.sort((a, b) => b.score - a.score);
+  ranking = ranking.slice(0, 20);
+  
+  localStorage.setItem("ranking", JSON.stringify(ranking));
+  
+  showRanking(ranking);
+}
+
+function showRanking(ranking) {
+  let html = `
+    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
+      <h1>🏆 Ranking</h1>
+      <table class="ranking-table">
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Puntos</th>
+          <th>Dificultad</th>
+        </tr>
+  `;
+  
+  ranking.slice(0, 10).forEach((entry, idx) => {
+    const diffLabel = difficultySettings[entry.difficulty]?.label || entry.difficulty;
+    html += `
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${entry.name}</td>
+        <td>⭐ ${entry.score}</td>
+        <td>${diffLabel}</td>
+      </tr>
+    `;
+  });
+  
+  html += `
+      </table>
+    </div>
+    <h2 style="margin-top: 30px;">🌱 La nutrición es clave para una vida digna y saludable.</h2>
+    <h3>¡Aplica lo aprendido! 💪</h3>
+    <button onclick="location.reload()" style="margin-top: 20px; background: #27ae60; width: 200px;">🔄 Jugar de Nuevo</button>
+  `;
+  
+  answersEl.innerHTML = "";
+  questionEl.innerHTML = html;
+}
+
+// Inicialización
+updateDisplay();
+</script>
+
+</body>
+</html>
