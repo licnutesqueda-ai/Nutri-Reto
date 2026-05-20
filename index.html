@@ -32,54 +32,52 @@ h1 {
 }
 
 .difficulty-selector {
-  background: rgba(0,0,0,0.2);
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px 0;
-}
-
-.difficulty-selector h2 {
-  margin-bottom: 15px;
-  font-size: 20px;
-}
-
-.difficulty-buttons {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
+  margin: 30px 0;
 }
 
 .difficulty-btn {
-  padding: 12px 20px;
-  border: 2px solid white;
-  background: transparent;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
   transition: all 0.3s;
+  min-width: 120px;
 }
 
-.difficulty-btn:hover {
-  background: white;
-  color: #27ae60;
+.difficulty-btn.easy {
+  background: #27ae60;
+  color: white;
+}
+
+.difficulty-btn.easy:hover {
+  background: #1e8449;
   transform: scale(1.05);
 }
 
-.difficulty-btn.active {
-  background: white;
-  color: #27ae60;
-  border-color: white;
+.difficulty-btn.normal {
+  background: #f39c12;
+  color: white;
 }
 
-.game-section {
-  display: none;
+.difficulty-btn.normal:hover {
+  background: #d68910;
+  transform: scale(1.05);
 }
 
-.game-section.active {
-  display: block;
+.difficulty-btn.hard {
+  background: #e74c3c;
+  color: white;
+}
+
+.difficulty-btn.hard:hover {
+  background: #c0392b;
+  transform: scale(1.05);
 }
 
 .header {
@@ -95,7 +93,7 @@ h1 {
 
 .stat {
   flex: 1;
-  min-width: 100px;
+  min-width: 80px;
 }
 
 .stat span {
@@ -104,14 +102,9 @@ h1 {
   display: block;
 }
 
-.stat-label {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
 .timer-bar {
   height: 10px;
-  background: red;
+  background: #27ae60;
   width: 100%;
   transition: width 0.1s linear;
   margin: 15px 0;
@@ -119,24 +112,17 @@ h1 {
 }
 
 .timer-bar.warning {
-  background: orange;
+  background: #f39c12;
 }
 
-.timer-bar.critical {
-  background: red;
-  animation: pulse 0.5s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.timer-bar.danger {
+  background: #e74c3c;
 }
 
 #q {
   font-size: clamp(18px, 4vw, 24px);
   margin: 30px 0 20px;
   min-height: 60px;
-  line-height: 1.4;
 }
 
 #a {
@@ -146,7 +132,7 @@ h1 {
   margin: 20px 0;
 }
 
-button {
+button.answer {
   padding: 15px;
   border: none;
   border-radius: 10px;
@@ -158,34 +144,13 @@ button {
   font-weight: bold;
 }
 
-button:hover {
+button.answer:hover {
   background: #2980b9;
   transform: scale(1.02);
 }
 
-button:active {
+button.answer:active {
   transform: scale(0.98);
-}
-
-.difficulty-level {
-  display: inline-block;
-  padding: 5px 10px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 5px;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.difficulty-level.easy {
-  background: #27ae60;
-}
-
-.difficulty-level.normal {
-  background: #f39c12;
-}
-
-.difficulty-level.hard {
-  background: #e74c3c;
 }
 
 .footer {
@@ -198,7 +163,6 @@ button:active {
   position: fixed;
   pointer-events: none;
   animation: fall 2s linear forwards;
-  z-index: 1000;
 }
 
 @keyframes fall {
@@ -208,26 +172,41 @@ button:active {
   }
 }
 
-.ranking-table {
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
-  border-collapse: collapse;
+.difficulty-indicator {
+  display: inline-block;
+  padding: 5px 15px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 20px;
+  margin-bottom: 15px;
+  font-weight: bold;
 }
 
-.ranking-table th,
-.ranking-table td {
-  padding: 10px;
-  border: 1px solid white;
-  text-align: center;
+.difficulty-indicator.easy {
+  border: 2px solid #27ae60;
 }
 
-.ranking-table th {
+.difficulty-indicator.normal {
+  border: 2px solid #f39c12;
+}
+
+.difficulty-indicator.hard {
+  border: 2px solid #e74c3c;
+}
+
+.back-btn {
   background: rgba(255,255,255,0.2);
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: all 0.3s;
 }
 
-.ranking-table tr:nth-child(even) {
-  background: rgba(0,0,0,0.1);
+.back-btn:hover {
+  background: rgba(255,255,255,0.4);
 }
 
 @media (max-width: 600px) {
@@ -235,17 +214,14 @@ button:active {
     padding: 10px;
   }
   
-  button {
+  button.answer {
     padding: 12px;
     font-size: 14px;
   }
   
-  .difficulty-buttons {
-    flex-direction: column;
-  }
-  
   .difficulty-btn {
-    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
   }
 }
 </style>
@@ -254,59 +230,41 @@ button:active {
 <body>
 
 <div class="container">
+  <h1>🍎 NutriReto DIF Irapuato</h1>
+  <p style="margin-bottom: 20px;">Facilitador: Guillermo Alberto Mosiño Esqueda</p>
 
-<h1>🍎 NutriReto DIF Irapuato</h1>
-<p style="margin-bottom: 20px;">Facilitador: Guillermo Alberto Mosiño Esqueda</p>
+  <div id="gameContainer" style="display:none;">
+    <div class="difficulty-indicator" id="difficultyIndicator"></div>
+    <div class="timer-bar" id="bar"></div>
 
-<!-- Selector de Dificultad -->
-<div class="difficulty-selector" id="difficultySelector">
-  <h2>Elige tu nivel de dificultad</h2>
-  <div class="difficulty-buttons">
-    <button class="difficulty-btn active" onclick="selectDifficulty('easy')">
-      🟢 Fácil<br><small>15 segundos</small>
-    </button>
-    <button class="difficulty-btn" onclick="selectDifficulty('normal')">
-      🟡 Normal<br><small>12 segundos</small>
-    </button>
-    <button class="difficulty-btn" onclick="selectDifficulty('hard')">
-      🔴 Difícil<br><small>8 segundos</small>
-    </button>
+    <div class="header">
+      <div class="stat">
+        ⏱️ <span id="time">15</span>s
+      </div>
+      <div class="stat">
+        ⭐ <span id="score">0</span>
+      </div>
+      <div class="stat">
+        🎯 <span id="level">1</span>
+      </div>
+    </div>
+
+    <h2 id="q"></h2>
+    <div id="a"></div>
   </div>
-</div>
 
-<!-- Sección del Juego -->
-<div class="game-section active" id="gameSection">
-  <div class="timer-bar" id="bar"></div>
-
-  <div class="header">
-    <div class="stat">
-      ⏱️ <span id="time">15</span>s
-      <div class="stat-label">Tiempo</div>
-    </div>
-    <div class="stat">
-      ⭐ <span id="score">0</span>
-      <div class="stat-label">Puntos</div>
-    </div>
-    <div class="stat">
-      🏆 <span id="level">1</span>
-      <div class="stat-label">Nivel</div>
+  <div id="difficultySelector" style="display:block;">
+    <h2 style="margin: 30px 0;">Elige tu nivel de dificultad:</h2>
+    <div class="difficulty-selector">
+      <button class="difficulty-btn easy" onclick="startGame('easy')">🟢 FÁCIL<br><small>(15s, 10 pts)</small></button>
+      <button class="difficulty-btn normal" onclick="startGame('normal')">🟡 NORMAL<br><small>(12s, 15 pts)</small></button>
+      <button class="difficulty-btn hard" onclick="startGame('hard')">🔴 DIFÍCIL<br><small>(8s, 20 pts)</small></button>
     </div>
   </div>
 
-  <div class="difficulty-level" id="difficultyDisplay"></div>
-
-  <h2 id="q"></h2>
-  <div id="a"></div>
-
-  <button onclick="backToDifficulty()" style="margin-top: 20px; background: #95a5a6;">
-    ⬅️ Volver a Dificultad
-  </button>
-</div>
-
-<div class="footer">
-  <p>🌱 La nutrición es clave para una vida digna y saludable.</p>
-</div>
-
+  <div class="footer">
+    <p>🌱 La nutrición es clave para una vida digna y saludable.</p>
+  </div>
 </div>
 
 <audio id="ok" preload="auto"></audio>
@@ -314,62 +272,75 @@ button:active {
 <audio id="music" loop preload="auto"></audio>
 
 <script>
-// Base de preguntas por dificultad
 const questionsByDifficulty = {
   easy: [
-    ["¿Mejor combinación saludable?",["Verduras + proteína + cereal","Solo carne","Solo fruta"],0],
-    ["¿Por qué tomar agua?",["Funciones del cuerpo","Solo sed","No sirve"],0],
-    ["Mucho azúcar causa?",["Enfermedades","Salud","Nada"],0],
-    ["Mejor opción?",["Fruta natural","Refresco","Jugo industrial"],0],
-    ["Energía saludable?",["Arroz o tortilla","Refresco","Dulces"],0],
-    ["Proteínas sirven?",["Músculos","Sabor","Nada"],0],
-    ["Sin verduras?",["Falta vitaminas","Nada","Solo hambre"],0],
-    ["Colación ideal?",["Fruta/yogurt","Papas","Dulces"],0],
-    ["Mejor hábito?",["Comer balanceado","Una vez al día","Evitar verduras"],0],
-    ["Mejor bebida?",["Agua","Refresco light","Energética"],0]
+    ["¿Mejor combinación saludable?", ["Verduras+proteína+cereal", "Solo carne", "Solo fruta"], 0],
+    ["¿Por qué tomar agua?", ["Funciones del cuerpo", "Solo sed", "No sirve"], 0],
+    ["Mucho azúcar causa?", ["Enfermedades", "Salud", "Nada"], 0],
+    ["Mejor opción?", ["Fruta natural", "Refresco", "Jugo industrial"], 0],
+    ["Energía saludable?", ["Arroz o tortilla", "Refresco", "Dulces"], 0],
+    ["Proteínas sirven?", ["Músculos", "Sabor", "Nada"], 0],
+    ["Sin verduras?", ["Falta vitaminas", "Nada", "Solo hambre"], 0],
+    ["Colación ideal?", ["Fruta/yogurt", "Papas", "Dulces"], 0],
+    ["Adulto mayor come poco?", ["Porciones pequeñas", "Obligar", "Quitar comida"], 0],
+    ["Poca movilidad?", ["Balance e hidratación", "Reposo", "No comer"], 0],
+    ["Falta agua?", ["Deshidratación", "Energía", "Nada"], 0],
+    ["Bajo presupuesto?", ["Legumbres", "Comida rápida", "Ultraprocesado"], 0],
+    ["Mejor hábito?", ["Comer balanceado", "Una vez al día", "Evitar verduras"], 0],
+    ["Mejor bebida?", ["Agua", "Refresco light", "Energética"], 0],
+    ["Prevención?", ["Alimentación sana", "Lo que sea", "Saltarse comidas"], 0]
   ],
   normal: [
-    ["Adulto mayor come poco?",["Porciones pequeñas frecuentes","Obligar a comer","Quitar comida"],0],
-    ["¿Qué causa deshidratación?",["Falta de agua","Mucho ejercicio","Comer rápido"],0],
-    ["Legumbres bajo presupuesto?",["Proteína económica","Solo comida rápida","Ultraprocesados"],0],
-    ["Prevención de enfermedades?",["Alimentación sana","Comer lo que sea","Saltarse comidas"],0],
-    ["Poca movilidad requiere?",["Balance e hidratación","Solo reposo","No comer"],0],
-    ["Vitaminas en verduras?",["Esenciales para salud","Innecesarias","Solo en frutas"],0],
-    ["Carbohidratos complejos?",["Arroz, avena, papa","Azúcar blanca","Dulces"],0],
-    ["Grasas saludables?",["Aguacate, frutos secos","Tocino frito","Comida rápida"],0],
-    ["Calcio para huesos?",["Lácteos, verduras verdes","Solo leche entera","Suplementos"],0],
-    ["Fibra alimentaria?",["Digestión y saciedad","Engorda","No sirve"],0]
+    ["¿Qué son los carbohidratos complejos?", ["Fibra y almidón", "Solo azúcar", "Grasas"], 0],
+    ["Vitamina C previene?", ["Resfriados", "Hambre", "Cansancio"], 0],
+    ["Calcio para?", ["Huesos y dientes", "Energía", "Visión"], 0],
+    ["Hierro ayuda?", ["Producir sangre", "Digestión", "Dormir"], 0],
+    ["Fibra beneficia?", ["Digestión saludable", "Músculo", "Piel"], 0],
+    ["Grasas saturadas?", ["Limitar consumo", "Comer mucho", "No importa"], 0],
+    ["Omega-3 de?", ["Pescado y nueces", "Pan blanco", "Refrescos"], 0],
+    ["Adulto mayor necesita?", ["Proteína extra", "Menos comida", "Solo líquidos"], 0],
+    ["Alimentos locales?", ["Frescos y económicos", "Tóxicos", "Pobres nutrientes"], 0],
+    ["Porciones correctas?", ["Según edad y actividad", "Todas iguales", "Grandes"], 0],
+    ["Antioxidantes?", ["Protegen células", "Engordan", "No sirven"], 0],
+    ["Azúcares simples?", ["Rápida energía", "Energía larga", "Sin energía"], 0],
+    ["Legumbres aportan?", ["Proteína vegetal", "Solo carbohidratos", "Grasas"], 0],
+    ["Horario de comidas?", ["Importante y regular", "Irrelevante", "Una al día"], 0],
+    ["Hidratación en ejercicio?", ["Beber agua constante", "No beber", "Tomar refresco"], 0]
   ],
   hard: [
-    ["¿Índice Glucémico alto causa?",["Picos de glucosa","Energía estable","Pérdida de peso"],0],
-    ["Aminoácidos esenciales?",["De proteínas, no produce cuerpo","De grasas","De carbohidratos"],0],
-    ["Antioxidantes previenen?",["Envejecimiento celular","Peso","Sed"],0],
-    ["¿Qué es biodisponibilidad?",["Absorción de nutrientes","Calorías totales","Peso de comida"],0],
-    ["Metabolismo basal afecta?",["Gasto en reposo","Solo ejercicio","Nada importante"],0],
-    ["Colesterol HDL vs LDL?",["HDL bueno, LDL malo","Ambos dañinos","Ambos útiles"],0],
-    ["Micronutrientes esenciales?",["Vitaminas y minerales","Solo proteínas","Solo grasas"],0],
-    ["Síndrome metabólico causa?",["Alimentación + sedentarismo","Solo genética","Edad"],0],
-    ["Fermentación probiótica?",["Mejora flora intestinal","Daña digestión","Innecesaria"],0],
-    ["¿Carga glucémica baja?",["Menos impacto glucosa","Más energía","Menos saciedad"],0]
+    ["Índice glucémico mide?", ["Absorción de carbohidratos", "Grasa corporal", "Minerales"], 0],
+    ["Aminoácidos esenciales?", ["El cuerpo no los produce", "Todos producidos", "No existen"], 0],
+    ["Biodisponibilidad es?", ["Cuánto absorbe el cuerpo", "Sabor del alimento", "Precio"], 0],
+    ["Síndrome metabólico?", ["Resistencia insulínica", "Alergia alimentaria", "Deficiencia de agua"], 0],
+    ["Polifenoles en?", ["Frutas y vegetales", "Carnes procesadas", "Refrescos"], 0],
+    ["Leptina regula?", ["Saciedad y apetito", "Digestión", "Sueño"], 0],
+    ["Colesterol HDL?", ["Protege el corazón", "Causa enfermedades", "Energía"], 0],
+    ["Microbioma intestinal?", ["Bacteria benéfica", "Parásito", "Inflamación"], 0],
+    ["Betacaroteno convierte?", ["Vitamina A", "Vitamina C", "Vitamina D"], 0],
+    ["Glutatión es?", ["Antioxidante potente", "Vitamina B", "Mineral"], 0],
+    ["Resistencia almidón?", ["Carbohidrato resistente", "Tipo de grasa", "Proteína vegetal"], 0],
+    ["Cortisol aumenta?", ["Estrés crónico", "Ejercicio light", "Dormir bien"], 0],
+    ["Quinua completa?", ["Todos aminoácidos", "Solo carbohidratos", "Sin proteína"], 0],
+    ["Fitatos en legumbres?", ["Bloqueadores de minerales", "Probióticos", "Grasas trans"], 0],
+    ["Inflamación crónica?", ["Alimentos ultraprocesados", "Frutas frescas", "Agua"], 0]
   ]
 };
 
 const difficultySettings = {
-  easy: { time: 15, color: '#27ae60', label: '🟢 Fácil', multiplier: 1 },
-  normal: { time: 12, color: '#f39c12', label: '🟡 Normal', multiplier: 1.5 },
-  hard: { time: 8, color: '#e74c3c', label: '🔴 Difícil', multiplier: 2 }
+  easy: { time: 15, multiplier: 1, label: "🟢 FÁCIL" },
+  normal: { time: 12, multiplier: 1.5, label: "🟡 NORMAL" },
+  hard: { time: 8, multiplier: 2, label: "🔴 DIFÍCIL" }
 };
 
-let currentDifficulty = 'easy';
 let currentIndex = 0;
 let score = 0;
 let time = 15;
 let level = 1;
 let gameActive = true;
 let timerInterval = null;
-let questions = [];
+let currentDifficulty = null;
+let currentQuestions = [];
 
-// Elementos del DOM
 const scoreEl = document.getElementById("score");
 const levelEl = document.getElementById("level");
 const timeEl = document.getElementById("time");
@@ -379,11 +350,10 @@ const answersEl = document.getElementById("a");
 const okAudio = document.getElementById("ok");
 const badAudio = document.getElementById("bad");
 const musicAudio = document.getElementById("music");
+const gameContainer = document.getElementById("gameContainer");
 const difficultySelector = document.getElementById("difficultySelector");
-const gameSection = document.getElementById("gameSection");
-const difficultyDisplay = document.getElementById("difficultyDisplay");
+const difficultyIndicator = document.getElementById("difficultyIndicator");
 
-// URLs de audio
 okAudio.src = "https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3";
 badAudio.src = "https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3";
 musicAudio.src = "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3";
@@ -393,50 +363,51 @@ function playSound(audio) {
   audio.play().catch(() => {});
 }
 
-function selectDifficulty(difficulty) {
+function startGame(difficulty) {
   currentDifficulty = difficulty;
-  questions = [...questionsByDifficulty[difficulty]].sort(() => Math.random() - 0.5);
+  const settings = difficultySettings[difficulty];
   
-  // Actualizar botones activos
-  document.querySelectorAll('.difficulty-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  event.target.closest('.difficulty-btn').classList.add('active');
+  // Mezclar preguntas
+  currentQuestions = [...questionsByDifficulty[difficulty]].sort(() => Math.random() - 0.5);
   
-  // Iniciar juego
   currentIndex = 0;
   score = 0;
   level = 1;
+  time = settings.time;
   gameActive = true;
-  time = difficultySettings[difficulty].time;
   
-  updateDisplay();
-  loadQuestion();
+  difficultySelector.style.display = "none";
+  gameContainer.style.display = "block";
+  
+  difficultyIndicator.textContent = settings.label;
+  difficultyIndicator.className = `difficulty-indicator ${difficulty}`;
+  
   playSound(musicAudio);
+  loadQuestion();
   startTimer();
 }
 
 function loadQuestion() {
-  if (currentIndex >= questions.length) {
+  if (currentIndex >= currentQuestions.length) {
     endGame();
     return;
   }
 
-  const [question, answers, correctIndex] = questions[currentIndex];
+  const [question, answers, correctIndex] = currentQuestions[currentIndex];
   
   questionEl.textContent = question;
-  difficultyDisplay.textContent = difficultySettings[currentDifficulty].label;
-  difficultyDisplay.className = 'difficulty-level ' + currentDifficulty;
   answersEl.innerHTML = "";
   
   answers.forEach((answer, idx) => {
     const button = document.createElement("button");
+    button.className = "answer";
     button.textContent = answer;
     button.onclick = () => checkAnswer(idx, correctIndex);
     answersEl.appendChild(button);
   });
 
-  time = difficultySettings[currentDifficulty].time;
+  const settings = difficultySettings[currentDifficulty];
+  time = settings.time;
   updateDisplay();
 }
 
@@ -444,17 +415,17 @@ function checkAnswer(selectedIdx, correctIdx) {
   if (!gameActive) return;
   
   gameActive = false;
-  clearInterval(timerInterval);
+  
+  const settings = difficultySettings[currentDifficulty];
   
   if (selectedIdx === correctIdx) {
-    const points = 10 * difficultySettings[currentDifficulty].multiplier;
-    score += points;
+    score += Math.round(10 * settings.multiplier);
     level++;
     playSound(okAudio);
     createConfetti();
   } else {
     playSound(badAudio);
-    alert("❌ Respuesta incorrecta\n✅ La correcta era: " + questions[currentIndex][1][correctIdx]);
+    alert("❌ Respuesta incorrecta\n✅ La correcta era: " + currentQuestions[currentIndex][1][correctIdx]);
   }
   
   currentIndex++;
@@ -463,19 +434,16 @@ function checkAnswer(selectedIdx, correctIdx) {
 }
 
 function updateDisplay() {
-  scoreEl.textContent = Math.round(score);
+  scoreEl.textContent = score;
   levelEl.textContent = level;
   timeEl.textContent = time;
   
   const percentage = (time / difficultySettings[currentDifficulty].time) * 100;
   barEl.style.width = percentage + "%";
   
-  barEl.classList.remove('warning', 'critical');
-  if (time <= 3) {
-    barEl.classList.add('critical');
-  } else if (time <= 5) {
-    barEl.classList.add('warning');
-  }
+  barEl.classList.remove("warning", "danger");
+  if (percentage <= 50) barEl.classList.add("warning");
+  if (percentage <= 25) barEl.classList.add("danger");
 }
 
 function startTimer() {
@@ -514,36 +482,25 @@ function createConfetti() {
   }
 }
 
-function backToDifficulty() {
-  clearInterval(timerInterval);
-  gameActive = false;
-  musicAudio.pause();
-  musicAudio.currentTime = 0;
-  
-  difficultySelector.style.display = 'block';
-  gameSection.style.display = 'none';
-}
-
 function endGame() {
   clearInterval(timerInterval);
   gameActive = false;
   
-  const finalScore = Math.round(score);
-  const name = prompt("🏆 ¡Juego terminado!\n\nPuntuación Final: " + finalScore + "\nNivel: " + level + "\nDificultad: " + difficultySettings[currentDifficulty].label + "\n\n¿Cuál es tu nombre?") || "Anónimo";
+  const settings = difficultySettings[currentDifficulty];
+  const name = prompt(`🏆 ¡Juego terminado!\n\nNivel: ${settings.label}\nPuntuación: ${score}\n\n¿Cuál es tu nombre?`) || "Anónimo";
   
-  let ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+  let ranking = JSON.parse(localStorage.getItem("nutri-ranking") || "[]");
   ranking.push({ 
     name, 
-    score: finalScore, 
-    level: level,
+    score, 
     difficulty: currentDifficulty,
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString()
+    level: settings.label,
+    date: new Date().toLocaleDateString("es-ES")
   });
   ranking.sort((a, b) => b.score - a.score);
   ranking = ranking.slice(0, 20);
   
-  localStorage.setItem("ranking", JSON.stringify(ranking));
+  localStorage.setItem("nutri-ranking", JSON.stringify(ranking));
   
   showRanking(ranking);
 }
@@ -551,24 +508,23 @@ function endGame() {
 function showRanking(ranking) {
   let html = `
     <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
-      <h1>🏆 Ranking</h1>
-      <table class="ranking-table">
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Puntos</th>
-          <th>Dificultad</th>
+      <h1>🏆 Ranking Top 20</h1>
+      <table style="width: 100%; margin: 20px auto; border-collapse: collapse; font-size: 14px;">
+        <tr style="background: rgba(255,255,255,0.2);">
+          <th style="padding: 10px; border: 1px solid white;">#</th>
+          <th style="padding: 10px; border: 1px solid white;">Nombre</th>
+          <th style="padding: 10px; border: 1px solid white;">Puntos</th>
+          <th style="padding: 10px; border: 1px solid white;">Dificultad</th>
         </tr>
   `;
   
-  ranking.slice(0, 10).forEach((entry, idx) => {
-    const diffLabel = difficultySettings[entry.difficulty]?.label || entry.difficulty;
+  ranking.forEach((entry, idx) => {
     html += `
       <tr>
-        <td>${idx + 1}</td>
-        <td>${entry.name}</td>
-        <td>⭐ ${entry.score}</td>
-        <td>${diffLabel}</td>
+        <td style="padding: 10px; border: 1px solid white;">${idx + 1}</td>
+        <td style="padding: 10px; border: 1px solid white;">${entry.name}</td>
+        <td style="padding: 10px; border: 1px solid white;">⭐ ${entry.score}</td>
+        <td style="padding: 10px; border: 1px solid white;">${entry.level}</td>
       </tr>
     `;
   });
@@ -578,15 +534,14 @@ function showRanking(ranking) {
     </div>
     <h2 style="margin-top: 30px;">🌱 La nutrición es clave para una vida digna y saludable.</h2>
     <h3>¡Aplica lo aprendido! 💪</h3>
-    <button onclick="location.reload()" style="margin-top: 20px; background: #27ae60; width: 200px;">🔄 Jugar de Nuevo</button>
+    <button class="back-btn" onclick="location.reload()">🔄 Jugar de Nuevo</button>
   `;
   
+  gameContainer.style.display = "none";
   answersEl.innerHTML = "";
   questionEl.innerHTML = html;
+  gameContainer.style.display = "block";
 }
-
-// Inicialización
-updateDisplay();
 </script>
 
 </body>

@@ -1,0 +1,25 @@
+# Ignorar archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar carpetas de dependencias
+node_modules/
+
+# Ignorar archivos de configuración local
+.env.local
+.env.*.local
+
+# Ignorar archivos de editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignorar logs
+*.log
+npm-debug.log*
+
+# Ignorar compilados
+dist/
+build/
